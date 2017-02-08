@@ -1,0 +1,42 @@
+CREATE TABLE `TB_BOARD` (
+  `IDX` int(11) NOT NULL AUTO_INCREMENT,
+  `PARENT_IDX` int(11) default NULL,
+  `TITLE` varchar(100) NOT NULL,
+  `CONTENTS` varchar(4000) NOT NULL,
+  `HIT_CNT` INT(100) NOT NULL,
+  `DEL_GB` varchar(1) NOT NULL,
+  `CREA_DTM` datetime NOT NULL,
+  `CREA_ID` varchar(30) NOT NULL,
+  PRIMARY KEY (`IDX`)
+)
+
+
+
+
+INSERT INTO `testproject`.`tb_board`
+(`TITLE`,
+`CONTENTS`,
+`HIT_CNT`,
+`DEL_GB`,
+`CREA_DTM`,
+`CREA_ID`)
+VALUES
+('제목',
+'내용',
+0,
+'N',
+now(),
+'idid');
+
+
+
+############################################################
+
+*
+filter = web.xml
+interceptor = spring프레임워크 상에서 controller가기전에
+annotation-driven(resolveArgument함수) = 기본적으로 RequestMapping, ModelAttribute, SessionAttribute, RequestParam 등을 사용 돌면서 값빼서 확인후 다시 넣는형태? / 일일이 값확인해서 셋안하고 넘어온걸 중간에서 확인해서 다시셋
+
+
+* @Controller, @Service, @Component, @Repository 와 같은 애노테이션 설정은
+component-scan 에 패키지 아래에  있으면 빈으로 설정이 되긴 합니다.
