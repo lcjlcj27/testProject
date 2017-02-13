@@ -46,7 +46,7 @@ CREATE TABLE TB_FILE
 
 
 
-############################################################
+############################################################ spring
 
 *
 filter = web.xml
@@ -59,4 +59,50 @@ component-scan 에 패키지 아래에  있으면 빈으로 설정이 되긴 합
 
 * @Component("fileUtils") 스프링에 이 클래스?함수? 는 new에서 사용하지않고 스프링에 맡기겠다 선언
 @Resource(name="fileUtils") 이렇게 가져와서 사용가능
+
+* aspectJ AOP(관점지향프로그래밍) 
+controller, interface, dao 각 항목전에 공통메서드를 먼저감 
+<aop:aspectj-autoproxy/>
+	<bean id="loggerAspect" class="first.common.logger.LoggerAspect" />
+	
+	
+############################################################ 페이징 쿼리
+SELECT
+    *
+FROM
+    (SELECT
+        ROWNUM AS RNUM, T1.*
+    FROM
+        (SELECT
+            *
+        FROM
+            TB_BOARD
+        ORDER BY IDX DESC) T1
+    WHERE ROWNUM <= 20)
+ WHERE RNUM >= 0;
+
+----------------------------------------------------------------
+
+SELECT
+    AAA.*
+FROM(
+    SELECT
+        COUNT(*) OVER() AS TOTAL_COUNT,
+        AA.*
+    FROM(
+        SELECT
+            ROW_NUMBER() OVER (ORDER BY IDX DESC) RNUM,
+            IDX,
+            TITLE,
+            HIT_CNT,
+            CREA_DTM
+        FROM
+            TB_BOARD
+     
+    ) AA
+) AAA
+WHERE
+    AAA.RNUM BETWEEN 0 AND 20
+
+
 
