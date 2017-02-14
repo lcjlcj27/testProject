@@ -103,7 +103,7 @@ IDENTIFIED BY testproject
 DEFAULT TABLESPACE testprojectTb
 TEMPORARY TABLESPACE TEMP;
 
-GRANT connect, resource, dba TO testproject;
+GRANT connect, resource, dba TO testproject; 
 
 
 
