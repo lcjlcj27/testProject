@@ -97,7 +97,7 @@
 								"<td>" + value.IDX + "</td>" + 
 								"<td class='title'>" +
 									"<a href='#this' name='title'>" + value.TITLE + "</a>" +
-									"<input type='hidden' name='title' value=" + value.IDX + ">" + 
+									"<input type='hidden' name='IDX' id='IDX' value=" + value.IDX + ">" + 
 								"</td>" +
 								"<td>" + value.HIT_CNT + "</td>" + 
 								"<td>" + value.CREA_DTM + "</td>" + 
