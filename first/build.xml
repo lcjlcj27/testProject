@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="EUC-KR" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="BNL_ACC_CORE">
+	<property environment="env"/>
+	<property name="target" value="1.7"/>
+	<property name="source" value="1.7"/>
+	<property name="encoding" value="EUC-KR" />
+	<property name="name" value="BNL_ACC_CORE" />
+	<property name="web.dir" value="WebContent"/>
+	<property name="web.lib" value="${web.dir}/WEB-INF/lib"/>
+	<property name="build.dir" value="${web.dir}/WEB-INF/classes"/>
+	<property name="target.home" value="/APP/webapp/acc_ext/" />
+	<property name="target.buildDir" value="WEB-INF/classes" />
+	<property name="target.lib" value="WEB-INF/lib" />
+
+	<path id="master-classpath">
+		<fileset dir="${web.lib}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean" description="Clean output directories">
+		<delete dir="${build.dir}"/>
+		<mkdir dir="${build.dir}"/>
+		<delete dir="${target.home}/${target.buildDir}"/>
+		<mkdir dir="${target.home}/${target.buildDir}"/>
+	</target>
+
+	<target name="build" description="Compile main source tree java files">
+		<javac destdir="${build.dir}" source="${source}" target="${target}" debug="true" deprecation="false" optimize="false" failonerror="true" encoding="${encoding}" includeantruntime="false">
+			<src path="src" />
+			<classpath refid="master-classpath" />
+		</javac>
+	</target>
+	<target name="copyFiles" description="copy files">
+		<!-- resource files copy -->
+		<copy includeemptydirs="false" todir="${target.home}/${target.buildDir}" overwrite="true">
+			<fileset dir="resource">
+				<exclude name="**/*.java"/>
+				<exclude name="**/t-frame-main_local.xml"/>
+				<exclude name="**/*sample*.xml"/>
+			</fileset>
+		</copy>
+		
+		<!-- copy file web.xml -->
+		<copy file="${web.dir}/WEB-INF/web_ext.xml" tofile="${target.home}/WEB-INF/web.xml" overwrite="true"/>
+		
+		<!-- class files copy -->
+		<copy includeemptydirs="false" todir="${target.home}/${target.buildDir}" overwrite="true">
+			<fileset dir="${build.dir}">
+				<exclude name="sample/**/*.*" />
+				<exclude name="test/**/*.*" />
+			</fileset>
+		</copy>
+		<!-- lib files copy -->
+		<copy includeemptydirs="false" todir="${target.home}/${target.lib}" overwrite="true">
+			<fileset dir="${web.lib}">
+				<exclude name="**/PetraCipherAPI.jar"/>
+				<exclude name="**/ojdbc6.jar"/>
+				<exclude name="**/orai18n.jar"/>
+			</fileset>
+		</copy>
+	</target>
+</project>
