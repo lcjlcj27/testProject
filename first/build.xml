@@ -1,21 +1,18 @@
-<?xml version="1.0" encoding="EUC-KR" standalone="no"?>
-<!-- WARNING: Eclipse auto-generated file.
-              Any modifications will be overwritten.
-              To include a user specific buildfile here, simply create one in the same
-              directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. -->
-<project basedir="." default="build" name="BNL_ACC_CORE">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="HKFireHP">
 	<property environment="env"/>
 	<property name="target" value="1.7"/>
 	<property name="source" value="1.7"/>
-	<property name="encoding" value="EUC-KR" />
-	<property name="name" value="BNL_ACC_CORE" />
+	<property name="encoding" value="UTF-8" />
+	<property name="name" value="HKFireHP" />
 	<property name="web.dir" value="WebContent"/>
 	<property name="web.lib" value="${web.dir}/WEB-INF/lib"/>
 	<property name="build.dir" value="${web.dir}/WEB-INF/classes"/>
-	<property name="target.home" value="/APP/webapp/acc_ext/" />
+	<property name="target.home" value="/APP/jeus/HKFIRE" />
 	<property name="target.buildDir" value="WEB-INF/classes" />
 	<property name="target.lib" value="WEB-INF/lib" />
+	<property name="target.views" value="WEB-INF/views"/>
+	<property name="target.webserver.home" value="webhk@hfldmow01:/APP/webhk/homepage" />
 
 	<path id="master-classpath">
 		<fileset dir="${web.lib}">
@@ -28,41 +25,58 @@
 		<mkdir dir="${build.dir}"/>
 		<delete dir="${target.home}/${target.buildDir}"/>
 		<mkdir dir="${target.home}/${target.buildDir}"/>
+		<delete dir="${target.home}/${target.views}"/>
+		<mkdir dir="${target.home}/${target.views}"/>
 	</target>
 
 	<target name="build" description="Compile main source tree java files">
 		<javac destdir="${build.dir}" source="${source}" target="${target}" debug="true" deprecation="false" optimize="false" failonerror="true" encoding="${encoding}" includeantruntime="false">
 			<src path="src" />
+			<src path="src_common" />
 			<classpath refid="master-classpath" />
 		</javac>
 	</target>
 	<target name="copyFiles" description="copy files">
+		<chmod perm="g+w">
+			<fileset dir="resource" />
+			<fileset dir="resource_common" />
+			<fileset dir="${web.dir}">
+				<exclude name="common/**"/>
+				<exclude name="META-INF/**" />
+				<exclude name="SmartEditor2.8.2/**" />
+				<exclude name="**/servlet-api-2.5.jar" />
+			</fileset>
+		</chmod>
 		<!-- resource files copy -->
 		<copy includeemptydirs="false" todir="${target.home}/${target.buildDir}" overwrite="true">
-			<fileset dir="resource">
-				<exclude name="**/*.java"/>
-				<exclude name="**/t-frame-main_local.xml"/>
-				<exclude name="**/*sample*.xml"/>
+			<fileset dir="resource" />
+			<fileset dir="resource_common" />
+		</copy>
+		
+		<!-- WebContent files copy -->
+		<copy includeemptydirs="false" todir="${target.home}" overwrite="true">
+			<fileset dir="${web.dir}">
+				<exclude name="common/**"/>
+				<exclude name="META-INF/**" />
+				<exclude name="SmartEditor2.8.2/**" />
+				<exclude name="Upload/**" />		<!-- 로컬에서 사용하는 폴더이므로 개발서버에는 만들지 않는다. -->
+				<exclude name="**/servlet-api-2.5.jar" />
 			</fileset>
 		</copy>
 		
-		<!-- copy file web.xml -->
-		<copy file="${web.dir}/WEB-INF/web_ext.xml" tofile="${target.home}/WEB-INF/web.xml" overwrite="true"/>
-		
-		<!-- class files copy -->
-		<copy includeemptydirs="false" todir="${target.home}/${target.buildDir}" overwrite="true">
-			<fileset dir="${build.dir}">
-				<exclude name="sample/**/*.*" />
-				<exclude name="test/**/*.*" />
+		<!-- static files copy -->
+		<scp todir="${target.webserver.home}" trust="true" keyfile="~/.ssh/id_rsa" passphrase="">
+			<fileset dir="${web.dir}">
+				<exclude name="**/*.jsp"/>
+				<exclude name="**/*.jrf"/>
+				<exclude name="cm/ubireport/license/"/>
+				<include name="keyguard/" />
+				<include name="SmartEditor2.8.2/" />
+				<include name="cm/" />
+				<include name="common/" />
+				<include name="vestweb/" />
 			</fileset>
-		</copy>
-		<!-- lib files copy -->
-		<copy includeemptydirs="false" todir="${target.home}/${target.lib}" overwrite="true">
-			<fileset dir="${web.lib}">
-				<exclude name="**/PetraCipherAPI.jar"/>
-				<exclude name="**/ojdbc6.jar"/>
-				<exclude name="**/orai18n.jar"/>
-			</fileset>
-		</copy>
+		</scp>
 	</target>
 </project>
+
