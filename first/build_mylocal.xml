@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="HKFireHP">
+	<property environment="env"/>
+	<property name="target" value="1.7"/>
+	<property name="source" value="1.7"/>
+	<property name="encoding" value="UTF-8" />
+	<property name="name" value="testproject" />
+	<property name="web.dir" value="WebContent"/>
+	<property name="web.lib" value="${web.dir}/WEB-INF/lib"/>
+	<property name="build.dir" value="${web.dir}/WEB-INF/classes"/>
+	<property name="target.home" value="C:\Users\HKFIRE\Desktop\programming\apache-tomcat-7.0.75_jenkins_target_server\webapps\testproject" />
+	<property name="target.buildDir" value="WEB-INF/classes" />
+	<property name="target.lib" value="WEB-INF/lib" />
+	<property name="target.views.jsp" value="WEB-INF/jsp"/>
+	<property name="target.views.view" value="WEB-INF/views"/>
+	<property name="target.webserver.home" value="webhk@hfldmow01:/APP/webhk/homepage" />
+
+	<path id="master-classpath">
+		<fileset dir="${web.lib}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean" description="Clean output directories">
+		<delete dir="${build.dir}"/>
+		<mkdir dir="${build.dir}"/>
+		<delete dir="${target.home}/${target.buildDir}"/>
+		<mkdir dir="${target.home}/${target.buildDir}"/>
+		<delete dir="${target.home}/${target.views.jsp}"/>
+		<mkdir dir="${target.home}/${target.views.jsp}"/>
+		<delete dir="${target.home}/${target.views.view}"/>
+		<mkdir dir="${target.home}/${target.views.view}"/>
+	</target>
+
+	<target name="build" description="Compile main source tree java files">
+		<javac destdir="${build.dir}" source="${source}" target="${target}" debug="true" deprecation="false" optimize="false" failonerror="true" encoding="${encoding}" includeantruntime="false">
+			<src path="src" />
+			<classpath refid="master-classpath" />
+		</javac>
+	</target>
+	<target name="copyFiles" description="copy files">
+		
+		<!-- WebContent files copy -->
+		<copy includeemptydirs="false" todir="${target.home}" overwrite="true">
+			<fileset dir="${web.dir}">
+			</fileset>
+		</copy>
+		
+		<!-- resources files copy -->
+		<copy includeemptydirs="false" todir="${target.home}/${target.buildDir}" overwrite="true">
+			<fileset dir="resources" />
+		</copy>
+		
+	</target>
+</project>
+
